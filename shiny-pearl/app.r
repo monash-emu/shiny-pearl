@@ -5,7 +5,8 @@ library(data.table)
 
 
 # Load the combined screening and household dataset
-scn_DT <- fread(paste(top_level_path, "/output/scn_betio.csv", sep = ""))
+# Replace hardcoded path with your respective path.
+scn_DT <- fread("C:/Users/teemo/projects/shiny-pearl/output/scn_betio.csv")
 
 # Reduce the columns. Keep only the columns that are used by the app.
 reduce_cols <- c(
@@ -15,12 +16,8 @@ reduce_cols <- c(
 )
 scn_DT <- scn_DT[, ..reduce_cols]
 
-ea_list <- unique(scn_DT[, ea_number])
-names(ea_list) <- ea_list
 
-
-
-
+# This is the User Interface for the application
 ui <- navbarPage(
   title = "PEARL screening ",
   selected = "Page 1",
@@ -39,9 +36,19 @@ ui <- navbarPage(
       grid_card(
         area = "Enumeration_Area",
         selectInput(
-          inputId = "mySelectInput",
-          label = "Select Input",
-          choices = ea_list
+          inputId = "p1_select_ea",
+          label = "Select Enumeration Area",
+          choices = list(
+            `71609000` = "71609000",
+            `71610020` = "71610020",
+            `71610110` = "71610110",
+            MISSING = "MISSING",
+            `71609732 REMIA` = "71609732 REMIA",
+            `71609731 BIG EYE` = "71609731 BIG EYE",
+            `71609810 ROADSIDE` = "71609810 ROADSIDE",
+            `71609820 SANTO BETERO` = "71609820 SANTO BETERO",
+            `71610010 NW CORNER` = "71610010 NW CORNER"
+          )
         ),
         sliderInput(
           inputId = "calc_age",
@@ -61,10 +68,10 @@ ui <- navbarPage(
     grid_container(
       layout = c(
         "facetOption",
-        "dists"
+        "dists      "
       ),
       row_sizes = c(
-        "165px",
+        "180px",
         "1fr"
       ),
       col_sizes = "1fr",
@@ -77,7 +84,7 @@ ui <- navbarPage(
           inputId = "distFacet",
           label = "Facet distribution by",
           choices = list(
-            `Gender` = "en_sex",
+            Gender = "en_sex",
             `Enumeration area` = "hh_ea",
             `TST results` = "tst_read_positive",
             `TB decision` = "tb_decision"
@@ -85,12 +92,43 @@ ui <- navbarPage(
         )
       )
     )
+  ),
+  tabPanel(
+    title = "Page 3",
+    grid_container(
+      layout = c(
+        "area0 .",
+        ".     ."
+      ),
+      row_sizes = c(
+        "1fr",
+        "1fr"
+      ),
+      col_sizes = c(
+        "0.99fr",
+        "1.01fr"
+      ),
+      gap_size = "10px",
+      grid_card(
+        area = "area0",
+        checkboxInput(
+          inputId = "myCheckboxInput",
+          label = "Checkbox Input",
+          value = FALSE,
+          width = "100%"
+        )
+      )
+    )
   )
 )
 
+# This is the Server for the application
 server <- function(input, output) {
   output$linePlots <- renderPlot({
-    survey <- scn_DT[(ea_number == input$mySelectInput) & (en_cal_age <= input$calc_age)]
+    if (input$p1_select_ea == "MISSING") {
+      input$p1_select_ea <- ""
+    }
+    survey <- scn_DT[(ea_number == input$p1_select_ea) & (en_cal_age <= input$calc_age)]
 
     main_plot <- ggplot(
       survey,
