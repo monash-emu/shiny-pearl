@@ -97,25 +97,45 @@ ui <- navbarPage(
     title = "Page 3",
     grid_container(
       layout = c(
-        "area0 .",
-        ".     ."
+        "P3_area1 area22323 . .",
+        ".        P3_12     . ."
       ),
       row_sizes = c(
-        "1fr",
-        "1fr"
+        "0.5fr",
+        "1.5fr"
       ),
       col_sizes = c(
-        "0.99fr",
-        "1.01fr"
+        "0.75fr",
+        "1.95fr",
+        "0.3fr",
+        "1fr"
       ),
       gap_size = "10px",
       grid_card(
-        area = "area0",
-        checkboxInput(
-          inputId = "myCheckboxInput",
-          label = "Checkbox Input",
-          value = FALSE,
-          width = "100%"
+        area = "P3_12",
+        plotOutput(
+          outputId = "plot",
+          width = "100%",
+          height = "400px"
+        )
+      ),
+      grid_card(
+        area = "P3_area1",
+        numericInput(
+          inputId = "myNumericInput",
+          label = "Numeric Input",
+          value = 5L
+        )
+      ),
+      grid_card(
+        area = "area22323",
+        checkboxGroupInput(
+          inputId = "myCheckboxGroup",
+          label = "Checkbox Group",
+          choices = list(
+            `choice a` = "a",
+            `choice b` = "b"
+          )
         )
       )
     )
