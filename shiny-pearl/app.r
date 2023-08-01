@@ -9,12 +9,12 @@ library(data.table)
 scn_DT <- fread("C:/Users/teemo/projects/shiny-pearl/output/scn_betio.csv")
 
 # Reduce the columns. Keep only the columns that are used by the app.
-reduce_cols <- c(
-  "record_id_scn", "record_id_hh", "en_sex", "en_cal_age",
-  "ea_number", "dwelling_fixed", "hh_name", "hh_ea", "hh_screened",
-  "hh_longitude", "hh_latitude", "hh_size", "hh_status", "tst_read_positive", "tb_decision"
-)
-scn_DT <- scn_DT[, ..reduce_cols]
+# reduce_cols <- c(
+#   "record_id", "dwelling_id", "en_sex", "en_cal_age",
+#   "ea_number", "hh_name", "hh_ea", "hh_screened",
+#   "hh_longitude", "hh_latitude", "hh_size", "hh_status", "tst_read_positive", "tb_decision"
+# )
+# scn_DT <- scn_DT[, ..reduce_cols]
 
 
 # This is the User Interface for the application
@@ -47,7 +47,10 @@ ui <- navbarPage(
             `71609731 BIG EYE` = "71609731 BIG EYE",
             `71609810 ROADSIDE` = "71609810 ROADSIDE",
             `71609820 SANTO BETERO` = "71609820 SANTO BETERO",
-            `71610010 NW CORNER` = "71610010 NW CORNER"
+            `71610010 NW CORNER` = "71610010 NW CORNER",
+            `71609301 ROUTI` = "71609301 ROUTI",
+            `71609710 TAROME` = "71609710 TAROME",
+            `71609720 ST JOHN` = "71609720 ST JOHN"
           )
         ),
         sliderInput(
